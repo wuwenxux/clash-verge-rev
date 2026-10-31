@@ -6,6 +6,7 @@ import {
 import { Theme as TauriOsTheme } from '@tauri-apps/api/window'
 import { useEffect, useMemo } from 'react'
 
+import frogBackground from '@/assets/image/frog-background.svg'
 import { useVerge } from '@/hooks/use-verge'
 import { defaultDarkTheme, defaultTheme } from '@/pages/_theme'
 import { useSetThemeMode, useThemeMode } from '@/services/states'
@@ -73,6 +74,7 @@ export const useCustomTheme = () => {
   const setMode = useSetThemeMode()
   const userBackgroundImage = theme_setting?.background_image || ''
   const hasUserBackground = !!userBackgroundImage
+  const backgroundImage = userBackgroundImage || frogBackground
 
   useEffect(() => {
     if (theme_mode === 'light' || theme_mode === 'dark') {
@@ -201,7 +203,7 @@ export const useCustomTheme = () => {
 
     const rootEle = document.documentElement
     if (rootEle) {
-      const backgroundColor = mode === 'light' ? '#ECECEC' : dt.background_color
+      const backgroundColor = dt.background_color
       const selectColor = mode === 'light' ? '#f5f5f5' : '#3E3E3E'
       const scrollColor = mode === 'light' ? '#90939980' : '#555555'
       const dividerColor =
@@ -221,7 +223,7 @@ export const useCustomTheme = () => {
       )
       rootEle.style.setProperty(
         '--scrollbar-bg',
-        mode === 'light' ? '#f1f1f1' : '#2E303D',
+        mode === 'light' ? '#f1f1f1' : '#1C2720',
       )
       rootEle.style.setProperty(
         '--scrollbar-thumb',
@@ -229,7 +231,7 @@ export const useCustomTheme = () => {
       )
       rootEle.style.setProperty(
         '--user-background-image',
-        hasUserBackground ? `url('${userBackgroundImage}')` : 'none',
+        `url('${backgroundImage}')`,
       )
       rootEle.style.setProperty(
         '--background-blend-mode',
@@ -276,18 +278,13 @@ export const useCustomTheme = () => {
         body {
           font-family: ${dt.font_family};
           background-color: var(--background-color);
-          ${
-            hasUserBackground
-              ? `
-            background-image: var(--user-background-image);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-blend-mode: var(--background-blend-mode);
-            opacity: var(--background-opacity);
-          `
-              : ''
-          }
+          background-image: var(--user-background-image);
+          background-size: ${hasUserBackground ? 'cover' : 'min(65vw, 560px)'};
+          background-position: center;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+          background-blend-mode: var(--background-blend-mode);
+          ${hasUserBackground ? 'opacity: var(--background-opacity);' : ''}
         }
 
         /* 修复可能的白色边框 */
@@ -297,7 +294,7 @@ export const useCustomTheme = () => {
 
         /* 确保模态框和对话框也使用暗色主题 */
         .MuiDialog-paper {
-          background-color: ${mode === 'light' ? '#ffffff' : '#2E303D'} !important;
+          background-color: ${mode === 'light' ? '#ffffff' : dt.background_color} !important;
         }
 
         /* 移除可能的白色点或线条 */
@@ -311,7 +308,7 @@ export const useCustomTheme = () => {
     }
 
     return muiTheme
-  }, [mode, theme_setting, userBackgroundImage, hasUserBackground])
+  }, [mode, theme_setting, hasUserBackground, backgroundImage])
 
   useEffect(() => {
     const id = setTimeout(() => {
