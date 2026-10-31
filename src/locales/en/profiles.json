@@ -230,6 +230,12 @@
       "linkLabel": "Magic link",
       "linkPlaceholder": "Paste the magic link from the email (auto-detected)",
       "confirm": "Import subscription"
+    },
+    "import": {
+      "title": "Import Subscription",
+      "tabAccount": "FrogLeap Account",
+      "tabUrl": "Subscription URL",
+      "urlLabel": "Subscription URL"
     }
   }
 }

@@ -378,6 +378,12 @@ export interface TranslationResources {
             lazy: string
           }
         }
+        import: {
+          tabAccount: string
+          tabUrl: string
+          title: string
+          urlLabel: string
+        }
         logViewer: {
           title: string
         }

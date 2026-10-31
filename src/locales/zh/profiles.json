@@ -230,6 +230,12 @@
       "linkLabel": "登录链接",
       "linkPlaceholder": "粘贴邮件中的登录链接（可自动检测）",
       "confirm": "导入订阅"
+    },
+    "import": {
+      "title": "导入订阅",
+      "tabAccount": "FrogLeap 账号",
+      "tabUrl": "订阅链接",
+      "urlLabel": "订阅链接"
     }
   }
 }

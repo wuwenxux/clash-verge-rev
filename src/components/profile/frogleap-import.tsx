@@ -1,10 +1,11 @@
-import { Button, Stack, TextField, Typography } from '@mui/material'
+import { Button, Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BaseDialog } from '@/components/base'
 import { frogleapConsumeTicket, frogleapSendLoginLink } from '@/services/cmds'
 import { showNotice } from '@/services/notice-service'
+import { isValidUrl } from '@/utils/network'
 
 // Provision a Cloudflare Turnstile sitekey that allows hostname `tauri.localhost`
 // and set it here; leave empty to send requests without the verification header.
@@ -25,13 +26,19 @@ declare global {
 
 const extractTicket = (text: string) => TICKET_PATTERN.exec(text)?.[1] ?? ''
 
-export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) => {
-  const { onImported } = props
+type ImportMode = 'frogleap' | 'url'
+
+export const FrogLeapImport = (props: {
+  onUrlImport: (url: string) => Promise<void>
+}) => {
+  const { onUrlImport } = props
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
+  const [mode, setMode] = useState<ImportMode>('frogleap')
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [link, setLink] = useState('')
+  const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const turnstileRef = useRef<HTMLDivElement>(null)
   const widgetIdRef = useRef<string | null>(null)
@@ -44,13 +51,15 @@ export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) 
     setEmail('')
     setSent(false)
     setLink('')
+    setUrl('')
     widgetIdRef.current = null
     importingRef.current = false
     if (turnstileRef.current) turnstileRef.current.innerHTML = ''
   }, [])
 
   useEffect(() => {
-    if (!open || !TURNSTILE_SITEKEY || widgetIdRef.current) return
+    if (!open || mode !== 'frogleap' || !TURNSTILE_SITEKEY || widgetIdRef.current)
+      return
     const render = () => {
       if (window.turnstile && turnstileRef.current && !widgetIdRef.current) {
         widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
@@ -67,7 +76,7 @@ export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) 
     script.async = true
     script.onload = render
     document.head.appendChild(script)
-  }, [open])
+  }, [open, mode])
 
   useEffect(() => {
     if (!open || !sent || ticket) return
@@ -106,7 +115,7 @@ export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) 
     }
   }
 
-  const handleImport = useCallback(
+  const handleTicketImport = useCallback(
     async (target: string) => {
       const found = extractTicket(target)
       if (!found) {
@@ -120,7 +129,7 @@ export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) 
         const result = await frogleapConsumeTicket(found)
         setOpen(false)
         reset()
-        onImported(result.sub_url)
+        await onUrlImport(result.sub_url)
       } catch (err) {
         showNotice.error(err)
       } finally {
@@ -128,17 +137,35 @@ export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) 
         importingRef.current = false
       }
     },
-    [onImported, reset],
+    [onUrlImport, reset],
   )
 
   useEffect(() => {
-    if (ticket && sent) void handleImport(link)
-  }, [ticket, sent, link, handleImport])
+    if (ticket && sent && mode === 'frogleap') void handleTicketImport(link)
+  }, [ticket, sent, mode, link, handleTicketImport])
+
+  const handleUrlImport = async () => {
+    const finalUrl = url.trim()
+    if (!isValidUrl(finalUrl)) {
+      showNotice.error('profiles.page.feedback.errors.invalidUrl')
+      return
+    }
+    setLoading(true)
+    try {
+      setOpen(false)
+      reset()
+      await onUrlImport(finalUrl)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleClose = () => {
     setOpen(false)
     reset()
   }
+
+  const urlMode = mode === 'url'
 
   return (
     <>
@@ -148,27 +175,37 @@ export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) 
         sx={{ borderRadius: '6px' }}
         onClick={() => setOpen(true)}
       >
-        {t('profiles.page.actions.frogleapImport')}
+        {t('profiles.page.actions.import')}
       </Button>
       <BaseDialog
         open={open}
-        title={t('profiles.modals.frogleap.title')}
+        title={t('profiles.modals.import.title')}
         contentSx={{ width: 380, pb: 1 }}
         cancelBtn={t('shared.actions.cancel')}
         onClose={handleClose}
         onCancel={handleClose}
-        onOk={sent ? () => handleImport(link) : handleSend}
+        onOk={urlMode ? handleUrlImport : sent ? () => handleTicketImport(link) : handleSend}
         okBtn={
-          sent
-            ? ticket
-              ? t('profiles.modals.frogleap.confirm')
-              : null
-            : t('profiles.modals.frogleap.send')
+          urlMode
+            ? t('profiles.page.actions.import')
+            : sent
+              ? ticket
+                ? t('profiles.modals.frogleap.confirm')
+                : null
+              : t('profiles.modals.frogleap.send')
         }
         loading={loading}
       >
+        <Tabs
+          value={mode}
+          onChange={(_, value: ImportMode) => setMode(value)}
+          sx={{ mb: 1 }}
+        >
+          <Tab value="frogleap" label={t('profiles.modals.import.tabAccount')} />
+          <Tab value="url" label={t('profiles.modals.import.tabUrl')} />
+        </Tabs>
         <Stack spacing={1.5} sx={{ mt: 1 }}>
-          {!sent && (
+          {mode === 'frogleap' && !sent && (
             <>
               <TextField
                 autoFocus
@@ -189,7 +226,7 @@ export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) 
               {TURNSTILE_SITEKEY && <div ref={turnstileRef} />}
             </>
           )}
-          {sent && (
+          {mode === 'frogleap' && sent && (
             <>
               <Typography variant="body2" color="text.secondary">
                 {t('profiles.modals.frogleap.sentHint', { email: email.trim() })}
@@ -204,6 +241,24 @@ export const FrogLeapImport = (props: { onImported: (subUrl: string) => void }) 
                 onChange={(e) => setLink(e.target.value)}
               />
             </>
+          )}
+          {urlMode && (
+            <TextField
+              autoFocus
+              size="small"
+              fullWidth
+              label={t('profiles.modals.import.urlLabel')}
+              placeholder={t('profiles.page.importForm.placeholder')}
+              value={url}
+              disabled={loading}
+              onChange={(e) => setUrl(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && url.trim() && !loading) {
+                  e.preventDefault()
+                  void handleUrlImport()
+                }
+              }}
+            />
           )}
         </Stack>
       </BaseDialog>

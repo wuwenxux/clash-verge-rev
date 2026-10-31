@@ -9,7 +9,6 @@ import {
   CheckBoxOutlineBlankRounded,
   CheckBoxRounded,
   ClearRounded,
-  ContentPasteRounded,
   DeleteRounded,
   IndeterminateCheckBoxRounded,
   LocalFireDepartmentRounded,
@@ -29,7 +28,6 @@ import { closeAllConnections } from 'tauri-plugin-mihomo-api'
 
 import {
   BasePage,
-  BaseStyledTextField,
   type DialogRef,
 } from '@/components/base'
 import { ProfileItem } from '@/components/profile/profile-item'
@@ -589,11 +587,6 @@ const ProfilePage = () => {
     await runProfileUpdates(target)
   })
 
-  const onCopyLink = async () => {
-    const text = await readText()
-    if (text) setUrl(text)
-  }
-
   const toggleBatchMode = () => {
     setBatchMode(!batchMode)
     if (!batchMode) {
@@ -818,56 +811,7 @@ const ProfilePage = () => {
           alignItems: 'center',
         }}
       >
-        <BaseStyledTextField
-          value={url}
-          variant="outlined"
-          onChange={(e) => setUrl(e.target.value)}
-          onKeyDown={(event) => {
-            if (event.key !== 'Enter' || event.nativeEvent.isComposing) {
-              return
-            }
-            if (!url || disabled || loading) {
-              return
-            }
-            event.preventDefault()
-            void onImport()
-          }}
-          placeholder={t('profiles.page.importForm.placeholder')}
-          slotProps={{
-            input: {
-              sx: { pr: 1 },
-              endAdornment: !url ? (
-                <IconButton
-                  size="small"
-                  sx={{ p: 0.5 }}
-                  title={t('profiles.page.importForm.actions.paste')}
-                  onClick={onCopyLink}
-                >
-                  <ContentPasteRounded fontSize="inherit" />
-                </IconButton>
-              ) : (
-                <IconButton
-                  size="small"
-                  sx={{ p: 0.5 }}
-                  title={t('shared.actions.clear')}
-                  onClick={() => setUrl('')}
-                >
-                  <ClearRounded fontSize="inherit" />
-                </IconButton>
-              ),
-            },
-          }}
-        />
-        <Button
-          disabled={!url || disabled}
-          loading={loading}
-          variant="contained"
-          size="small"
-          sx={{ borderRadius: '6px' }}
-          onClick={() => void onImport()}
-        >
-          {t('profiles.page.actions.import')}
-        </Button>
+        <FrogLeapImport onUrlImport={async (subUrl) => onImport(subUrl)} />
         <Button
           variant="contained"
           size="small"
@@ -876,7 +820,6 @@ const ProfilePage = () => {
         >
           {t('shared.actions.new')}
         </Button>
-        <FrogLeapImport onImported={(subUrl) => void onImport(subUrl)} />
       </Stack>
 
       <Box

@@ -230,6 +230,12 @@
       "linkLabel": "登入連結",
       "linkPlaceholder": "貼上郵件中的登入連結（可自動檢測）",
       "confirm": "匯入訂閱"
+    },
+    "import": {
+      "title": "匯入訂閱",
+      "tabAccount": "FrogLeap 帳號",
+      "tabUrl": "訂閱連結",
+      "urlLabel": "訂閱連結"
     }
   }
 }
