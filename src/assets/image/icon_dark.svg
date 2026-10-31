@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <g transform="translate(0 -80)">
+  <g transform="translate(256 256) scale(2.2) translate(-256 -271)">
     <ellipse cx="256" cy="372" rx="98" ry="66" fill="#22C55E"/>
     <circle cx="206" cy="300" r="36" fill="#4ADE80"/>
     <circle cx="306" cy="300" r="36" fill="#4ADE80"/>
