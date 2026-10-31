@@ -3,11 +3,11 @@ const OS = getSystem()
 
 // default theme setting
 export const defaultTheme = {
-  primary_color: '#16A34A',
+  primary_color: '#22C55E',
   secondary_color: '#FC9B76',
   primary_text: '#102016',
   secondary_text: '#3C3C4399',
-  info_color: '#16A34A',
+  info_color: '#22C55E',
   error_color: '#FF3B30',
   warning_color: '#FF9500',
   success_color: '#06943D',
