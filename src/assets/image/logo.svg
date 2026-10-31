@@ -1,6 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117 27">
   <defs>
-    <linearGradient id="frogleap-wordmark" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="frogleap-wordmark-light" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#15803D"/>
+      <stop offset="100%" stop-color="#166534"/>
+    </linearGradient>
+    <linearGradient id="frogleap-wordmark-dark" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#22C55E"/>
       <stop offset="50%" stop-color="#86EFAC"/>
       <stop offset="100%" stop-color="#22C55E"/>
@@ -9,6 +13,12 @@
     </linearGradient>
   </defs>
   <style>
+    svg[data-mode='light'] .frogleap-word {
+      fill: url(#frogleap-wordmark-light);
+    }
+    svg[data-mode='dark'] .frogleap-word {
+      fill: url(#frogleap-wordmark-dark);
+    }
     .frogleap-word {
       animation: frogleap-hop 2.8s ease-in-out infinite;
     }
@@ -20,5 +30,5 @@
       33% { transform: translateY(0); }
     }
   </style>
-  <text class="frogleap-word" x="0" y="21" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="20" font-weight="700" fill="url(#frogleap-wordmark)">Frogleap</text>
+  <text class="frogleap-word" x="0" y="21" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="20" font-weight="700">Frogleap</text>
 </svg>

@@ -144,7 +144,7 @@ export const LayoutSidebar = (props: LayoutSidebarProps) => {
             }}
             inheritViewBox
           />
-          <LogoSvg fill={isDark ? 'white' : 'black'} />
+          <LogoSvg data-mode={isDark ? 'dark' : 'light'} />
         </div>
         <UpdateButton className="the-newbtn" />
       </div>
