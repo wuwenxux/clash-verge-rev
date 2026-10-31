@@ -47,7 +47,7 @@ jobs:
       - name: Build installer
         run: |
           jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json > src-tauri/tauri.conf.json.tmp
-          mv src-tauri/tauri.conf.json.tmp src-tauri/tauri.conf.json
+          mv -Force src-tauri/tauri.conf.json.tmp src-tauri/tauri.conf.json
           pnpm tauri build --target ${{ matrix.target }}
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
