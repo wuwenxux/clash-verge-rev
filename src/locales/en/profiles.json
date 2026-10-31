@@ -4,7 +4,8 @@
       "updateAll": "Update All Profiles",
       "viewRuntimeConfig": "View Runtime Config",
       "reactivate": "Reactivate Profiles",
-      "import": "Import"
+      "import": "Import",
+      "frogleapImport": "Import via FrogLeap"
     },
     "batch": {
       "actions": {
@@ -37,7 +38,9 @@
         "readFailed": "Failed to read profile",
         "reorderFailed": "Failed to reorder profiles",
         "switchFailed": "Failed to switch profile",
-        "updateFailed": "Failed to update profile"
+        "updateFailed": "Failed to update profile",
+        "invalidEmail": "Please enter a valid email address",
+        "invalidMagicLink": "Cannot extract ticket from the link; paste the full email link"
       },
       "notifications": {
         "importRetry": "Import failed, retrying with Clash proxy...",
@@ -47,7 +50,8 @@
         "profileSwitched": "Profile Switched",
         "profileReactivated": "Profile Reactivated",
         "switchBusy": "Profile switch is already in progress",
-        "batchDeleted": "Selected profiles deleted successfully"
+        "batchDeleted": "Selected profiles deleted successfully",
+        "linkThrottled": "Sending too frequently, please retry later"
       },
       "notices": {
         "forceRefreshCompleted": "Force refresh completed",
@@ -216,6 +220,16 @@
     },
     "qrViewer": {
       "title": "Subscription QR Code"
+    },
+    "frogleap": {
+      "title": "FrogLeap One-click Import",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Email used for purchase",
+      "send": "Send login link",
+      "sentHint": "Login link sent to {{email}}. Click the link in that email; import starts automatically once detected.",
+      "linkLabel": "Magic link",
+      "linkPlaceholder": "Paste the magic link from the email (auto-detected)",
+      "confirm": "Import subscription"
     }
   }
 }

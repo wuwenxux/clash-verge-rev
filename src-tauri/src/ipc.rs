@@ -31,6 +31,8 @@ pub fn builder() -> tauri_specta::Builder<tauri::Wry> {
             cmd::reinstall_service,
             cmd::repair_service,
             cmd::continue_with_sidecar,
+            cmd::frogleap_send_login_link,
+            cmd::frogleap_consume_ticket,
             cmd::sync_runtime_providers,
             cmd::get_clash_info,
             cmd::patch_clash_config,

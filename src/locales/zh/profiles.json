@@ -4,7 +4,8 @@
       "updateAll": "更新所有订阅",
       "viewRuntimeConfig": "查看运行时订阅",
       "reactivate": "重新激活订阅",
-      "import": "导入"
+      "import": "导入",
+      "frogleapImport": "FrogLeap 导入"
     },
     "batch": {
       "actions": {
@@ -37,7 +38,9 @@
         "readFailed": "读取订阅失败",
         "reorderFailed": "调整订阅顺序失败",
         "switchFailed": "切换订阅失败",
-        "updateFailed": "更新订阅失败"
+        "updateFailed": "更新订阅失败",
+        "invalidEmail": "请输入有效的邮箱地址",
+        "invalidMagicLink": "无法从链接中解析出 ticket，请粘贴完整的邮件链接"
       },
       "notifications": {
         "importRetry": "订阅导入失败，尝试使用 Clash 代理导入",
@@ -47,7 +50,8 @@
         "profileSwitched": "订阅已切换",
         "profileReactivated": "订阅已激活",
         "switchBusy": "正在切换订阅，请稍后重试",
-        "batchDeleted": "选中的订阅已成功删除"
+        "batchDeleted": "选中的订阅已成功删除",
+        "linkThrottled": "发送过于频繁，请稍后再试"
       },
       "notices": {
         "forceRefreshCompleted": "数据已强制刷新",
@@ -216,6 +220,16 @@
     },
     "qrViewer": {
       "title": "订阅二维码"
+    },
+    "frogleap": {
+      "title": "FrogLeap 一键导入",
+      "emailLabel": "邮箱",
+      "emailPlaceholder": "输入购买时使用的邮箱",
+      "send": "发送登录链接",
+      "sentHint": "登录链接已发送至 {{email}}，请到邮箱点击邮件中的链接，检测到后会自动导入",
+      "linkLabel": "登录链接",
+      "linkPlaceholder": "粘贴邮件中的登录链接（可自动检测）",
+      "confirm": "导入订阅"
     }
   }
 }

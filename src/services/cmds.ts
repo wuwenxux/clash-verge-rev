@@ -78,6 +78,17 @@ export async function importProfile(url: string, option?: IProfileOption) {
   return commands.importProfile(url, option || { with_proxy: true })
 }
 
+export async function frogleapSendLoginLink(
+  contact: string,
+  turnstileToken?: string,
+) {
+  return commands.frogleapSendLoginLink(contact, turnstileToken ?? null)
+}
+
+export async function frogleapConsumeTicket(ticket: string) {
+  return commands.frogleapConsumeTicket(ticket)
+}
+
 export async function reorderProfile(activeId: string, overId: string) {
   return commands.reorderProfile(activeId, overId)
 }

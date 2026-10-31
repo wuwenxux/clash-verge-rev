@@ -34,6 +34,7 @@ import {
 } from '@/components/base'
 import { ProfileItem } from '@/components/profile/profile-item'
 import { ProfileMore } from '@/components/profile/profile-more'
+import { FrogLeapImport } from '@/components/profile/frogleap-import'
 import {
   ProfileViewer,
   type ProfileViewerRef,
@@ -204,9 +205,10 @@ const ProfilePage = () => {
     return [...new Set([profiles.current ?? ''])].filter(Boolean)
   }
 
-  const onImport = async () => {
-    if (!url) return
-    if (!isValidUrl(url)) {
+  const onImport = async (targetUrl?: string) => {
+    const finalUrl = targetUrl ?? url
+    if (!finalUrl) return
+    if (!isValidUrl(finalUrl)) {
       showNotice.error('profiles.page.feedback.errors.invalidUrl')
       return
     }
@@ -220,7 +222,7 @@ const ProfilePage = () => {
       await performRobustRefresh(prevCurrent)
     }
     try {
-      await mutate(() => importProfile(url), {
+      await mutate(() => importProfile(finalUrl), {
         id: 'import-profile',
         errorNotice: false,
       })
@@ -238,7 +240,7 @@ const ProfilePage = () => {
       try {
         await mutate(
           () =>
-            importProfile(url, {
+            importProfile(finalUrl, {
               with_proxy: false,
               self_proxy: true,
             }),
@@ -862,7 +864,7 @@ const ProfilePage = () => {
           variant="contained"
           size="small"
           sx={{ borderRadius: '6px' }}
-          onClick={onImport}
+          onClick={() => void onImport()}
         >
           {t('profiles.page.actions.import')}
         </Button>
@@ -874,6 +876,7 @@ const ProfilePage = () => {
         >
           {t('shared.actions.new')}
         </Button>
+        <FrogLeapImport onImported={(subUrl) => void onImport(subUrl)} />
       </Stack>
 
       <Box

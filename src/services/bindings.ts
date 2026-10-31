@@ -44,6 +44,17 @@ export const commands = {
     __TAURI_INVOKE<ServiceInstallOutcome>('reinstall_service'),
   repairService: () => __TAURI_INVOKE<ServiceInstallOutcome>('repair_service'),
   continueWithSidecar: () => __TAURI_INVOKE<null>('continue_with_sidecar'),
+  /**  Request a FrogLeap magic login link for the given email address. */
+  frogleapSendLoginLink: (contact: string, turnstileToken: string | null) =>
+    __TAURI_INVOKE<FrogleapLoginLinkResult>('frogleap_send_login_link', {
+      contact,
+      turnstileToken,
+    }),
+  /**  Consume a magic-link ticket and return the account's subscription URL. */
+  frogleapConsumeTicket: (ticket: string) =>
+    __TAURI_INVOKE<FrogleapConsumeResult>('frogleap_consume_ticket', {
+      ticket,
+    }),
   syncRuntimeProviders: () => __TAURI_INVOKE<void>('sync_runtime_providers'),
   getClashInfo: () => __TAURI_INVOKE<ClashInfo>('get_clash_info'),
   patchClashConfig: (payload: YamlMapping) =>
@@ -311,6 +322,16 @@ export type FailedOperation =
   | 'systemProxyDisable'
   | 'systemProxyRestore'
   | 'systemProxyGuard'
+
+export type FrogleapConsumeResult = {
+  sub_url: string
+  email: string
+  status: string
+}
+
+export type FrogleapLoginLinkResult = {
+  throttled: boolean
+}
 
 /**  Define the `profiles.yaml` schema */
 export type IProfiles = IProfiles_Serialize | IProfiles_Deserialize

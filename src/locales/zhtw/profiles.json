@@ -4,7 +4,8 @@
       "updateAll": "更新所有訂閱",
       "viewRuntimeConfig": "查看執行時訂閱",
       "reactivate": "重新啟用訂閱",
-      "import": "匯入"
+      "import": "匯入",
+      "frogleapImport": "FrogLeap 匯入"
     },
     "batch": {
       "actions": {
@@ -37,7 +38,9 @@
         "readFailed": "讀取訂閱失敗",
         "reorderFailed": "調整訂閱順序失敗",
         "switchFailed": "切換訂閱失敗",
-        "updateFailed": "更新訂閱失敗"
+        "updateFailed": "更新訂閱失敗",
+        "invalidEmail": "請輸入有效的郵箱地址",
+        "invalidMagicLink": "無法從連結中解析出 ticket，請貼上完整的郵件連結"
       },
       "notifications": {
         "importRetry": "訂閱匯入失敗，嘗試使用 Clash 代理匯入",
@@ -47,7 +50,8 @@
         "profileSwitched": "訂閱已切換",
         "profileReactivated": "訂閱已啟用",
         "switchBusy": "正在切換配置，請稍後重試",
-        "batchDeleted": "選取的訂閱已成功刪除"
+        "batchDeleted": "選取的訂閱已成功刪除",
+        "linkThrottled": "發送過於頻繁，請稍後再試"
       },
       "notices": {
         "forceRefreshCompleted": "Force refresh completed",
@@ -216,6 +220,16 @@
     },
     "qrViewer": {
       "title": "Subscription QR Code"
+    },
+    "frogleap": {
+      "title": "FrogLeap 一鍵匯入",
+      "emailLabel": "郵箱",
+      "emailPlaceholder": "輸入購買時使用的郵箱",
+      "send": "發送登入連結",
+      "sentHint": "登入連結已發送至 {{email}}，請到郵箱點擊郵件中的連結，檢測到後會自動匯入",
+      "linkLabel": "登入連結",
+      "linkPlaceholder": "貼上郵件中的登入連結（可自動檢測）",
+      "confirm": "匯入訂閱"
     }
   }
 }

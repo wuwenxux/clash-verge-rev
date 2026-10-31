@@ -333,6 +333,16 @@ export interface TranslationResources {
             readOnly: string
           }
         }
+        frogleap: {
+          confirm: string
+          emailLabel: string
+          emailPlaceholder: string
+          linkLabel: string
+          linkPlaceholder: string
+          send: string
+          sentHint: string
+          title: string
+        }
         groupsEditor: {
           actions: {
             append: string
@@ -424,6 +434,7 @@ export interface TranslationResources {
       }
       page: {
         actions: {
+          frogleapImport: string
           import: string
           reactivate: string
           updateAll: string
@@ -448,6 +459,8 @@ export interface TranslationResources {
             deleteFailed: string
             enhanceFailed: string
             importFailed: string
+            invalidEmail: string
+            invalidMagicLink: string
             invalidUrl: string
             onlyYaml: string
             openFailed: string
@@ -467,6 +480,7 @@ export interface TranslationResources {
             importNeedsRefresh: string
             importRetry: string
             importSuccess: string
+            linkThrottled: string
             profileReactivated: string
             profileSwitched: string
             switchBusy: string
@@ -1589,6 +1603,7 @@ export interface TranslationResources {
           noDisney: string
           originalsOnly: string
           pending: string
+          risky: string
           unsupportedRegion: string
           yes: string
         }
