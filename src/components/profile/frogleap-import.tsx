@@ -108,6 +108,10 @@ export const FrogLeapImport = (props: {
       widgetIdRef.current && window.turnstile
         ? window.turnstile.getResponse(widgetIdRef.current)
         : undefined
+    if (sitekey && !token) {
+      showNotice.error('profiles.page.feedback.errors.turnstileMissing')
+      return
+    }
     setLoading(true)
     try {
       const result = await frogleapSendLoginLink(email.trim(), token)

@@ -183,6 +183,7 @@ export const translationKeys = [
   'profiles.page.feedback.errors.updateFailed',
   'profiles.page.feedback.errors.invalidEmail',
   'profiles.page.feedback.errors.invalidMagicLink',
+  'profiles.page.feedback.errors.turnstileMissing',
   'profiles.page.feedback.notifications.importRetry',
   'profiles.page.feedback.notifications.importFail',
   'profiles.page.feedback.notifications.importNeedsRefresh',

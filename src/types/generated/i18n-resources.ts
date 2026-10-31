@@ -473,6 +473,7 @@ export interface TranslationResources {
             readFailed: string
             reorderFailed: string
             switchFailed: string
+            turnstileMissing: string
             updateFailed: string
           }
           notices: {

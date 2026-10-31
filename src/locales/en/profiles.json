@@ -40,7 +40,8 @@
         "switchFailed": "Failed to switch profile",
         "updateFailed": "Failed to update profile",
         "invalidEmail": "Please enter a valid email address",
-        "invalidMagicLink": "Cannot extract ticket from the link; paste the full email link"
+        "invalidMagicLink": "Cannot extract ticket from the link; paste the full email link",
+        "turnstileMissing": "Turnstile token missing; complete the challenge before sending"
       },
       "notifications": {
         "importRetry": "Import failed, retrying with Clash proxy...",

@@ -40,7 +40,8 @@
         "switchFailed": "切换订阅失败",
         "updateFailed": "更新订阅失败",
         "invalidEmail": "请输入有效的邮箱地址",
-        "invalidMagicLink": "无法从链接中解析出 ticket，请粘贴完整的邮件链接"
+        "invalidMagicLink": "无法从链接中解析出 ticket，请粘贴完整的邮件链接",
+        "turnstileMissing": "未检测到人机验证 token，请完成验证后再发送"
       },
       "notifications": {
         "importRetry": "订阅导入失败，尝试使用 Clash 代理导入",
