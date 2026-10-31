@@ -8,6 +8,11 @@ use super::CmdResult;
 const API_BASE: &str = "https://frogleap.click";
 
 #[derive(Debug, Serialize, Type)]
+pub struct FrogleapSiteConfig {
+    pub turnstile_site_key: Option<std::string::String>,
+}
+
+#[derive(Debug, Serialize, Type)]
 pub struct FrogleapLoginLinkResult {
     pub throttled: bool,
 }
@@ -42,6 +47,30 @@ fn api_failure(
         .filter(|message| !message.is_empty())
         .unwrap_or_else(|| body.to_owned());
     super::CommandFailure::coded("frogleap-api", format!("{operation} failed ({status}): {detail}"))
+}
+
+/// Fetch public site configuration (e.g. the Turnstile site key).
+#[tauri::command]
+#[specta::specta]
+pub async fn frogleap_site_config() -> CmdResult<FrogleapSiteConfig> {
+    let client = http_client()?;
+    let response = client
+        .get(format!("{API_BASE}/api/config"))
+        .send()
+        .await
+        .map_err(|e| super::CommandFailure::coded("frogleap-network", e))?;
+    let body = response
+        .text()
+        .await
+        .map_err(|e| super::CommandFailure::coded("frogleap-network", e))?;
+    let parsed: serde_json::Value = serde_json::from_str(&body)
+        .map_err(|e| super::CommandFailure::coded("frogleap-payload", format!("{e}: {body}")))?;
+    let turnstile_site_key = parsed
+        .pointer("/data/turnstile_site_key")
+        .and_then(serde_json::Value::as_str)
+        .filter(|key| !key.is_empty())
+        .map(str::to_owned);
+    Ok(FrogleapSiteConfig { turnstile_site_key })
 }
 
 /// Request a FrogLeap magic login link for the given email address.

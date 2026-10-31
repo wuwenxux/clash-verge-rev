@@ -55,6 +55,9 @@ export const commands = {
     __TAURI_INVOKE<FrogleapConsumeResult>('frogleap_consume_ticket', {
       ticket,
     }),
+  /**  Fetch public site configuration (e.g. the Turnstile site key). */
+  frogleapSiteConfig: () =>
+    __TAURI_INVOKE<FrogleapSiteConfig>('frogleap_site_config'),
   syncRuntimeProviders: () => __TAURI_INVOKE<void>('sync_runtime_providers'),
   getClashInfo: () => __TAURI_INVOKE<ClashInfo>('get_clash_info'),
   patchClashConfig: (payload: YamlMapping) =>
@@ -331,6 +334,10 @@ export type FrogleapConsumeResult = {
 
 export type FrogleapLoginLinkResult = {
   throttled: boolean
+}
+
+export type FrogleapSiteConfig = {
+  turnstile_site_key: string | null
 }
 
 /**  Define the `profiles.yaml` schema */

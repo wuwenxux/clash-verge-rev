@@ -89,6 +89,10 @@ export async function frogleapConsumeTicket(ticket: string) {
   return commands.frogleapConsumeTicket(ticket)
 }
 
+export async function frogleapSiteConfig() {
+  return commands.frogleapSiteConfig()
+}
+
 export async function reorderProfile(activeId: string, overId: string) {
   return commands.reorderProfile(activeId, overId)
 }

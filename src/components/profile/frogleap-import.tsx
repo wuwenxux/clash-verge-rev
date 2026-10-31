@@ -3,13 +3,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BaseDialog } from '@/components/base'
-import { frogleapConsumeTicket, frogleapSendLoginLink } from '@/services/cmds'
+import {
+  frogleapConsumeTicket,
+  frogleapSendLoginLink,
+  frogleapSiteConfig,
+} from '@/services/cmds'
 import { showNotice } from '@/services/notice-service'
 import { isValidUrl } from '@/utils/network'
-
-// Provision a Cloudflare Turnstile sitekey that allows hostname `tauri.localhost`
-// and set it here; leave empty to send requests without the verification header.
-const TURNSTILE_SITEKEY = ''
 
 const TICKET_PATTERN = /[?&]ticket=([^\s&]+)/
 
@@ -40,6 +40,7 @@ export const FrogLeapImport = (props: {
   const [link, setLink] = useState('')
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
+  const [sitekey, setSitekey] = useState('')
   const turnstileRef = useRef<HTMLDivElement>(null)
   const widgetIdRef = useRef<string | null>(null)
   const importingRef = useRef(false)
@@ -58,12 +59,18 @@ export const FrogLeapImport = (props: {
   }, [])
 
   useEffect(() => {
-    if (!open || mode !== 'frogleap' || !TURNSTILE_SITEKEY || widgetIdRef.current)
-      return
+    if (!open) return
+    frogleapSiteConfig()
+      .then((config) => setSitekey(config.turnstile_site_key ?? ''))
+      .catch(() => setSitekey(''))
+  }, [open])
+
+  useEffect(() => {
+    if (!open || mode !== 'frogleap' || !sitekey || widgetIdRef.current) return
     const render = () => {
       if (window.turnstile && turnstileRef.current && !widgetIdRef.current) {
         widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-          sitekey: TURNSTILE_SITEKEY,
+          sitekey,
         })
       }
     }
@@ -76,7 +83,7 @@ export const FrogLeapImport = (props: {
     script.async = true
     script.onload = render
     document.head.appendChild(script)
-  }, [open, mode])
+  }, [open, mode, sitekey])
 
   useEffect(() => {
     if (!open || !sent || ticket) return
@@ -223,7 +230,7 @@ export const FrogLeapImport = (props: {
                   }
                 }}
               />
-              {TURNSTILE_SITEKEY && <div ref={turnstileRef} />}
+              {sitekey && <div ref={turnstileRef} />}
             </>
           )}
           {mode === 'frogleap' && sent && (
